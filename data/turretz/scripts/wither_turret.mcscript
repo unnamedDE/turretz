@@ -1,0 +1,156 @@
+#file: ./wither_turret/main
+
+/function turretz:wither_turret/place_detect
+asat(@e[type=armor_stand,tag=turretz_wither_turret]) {
+  positioned('~ ~.5 ~') {
+    /particle minecraft:dust 1 0 0 1 ^ ^ ^.25 0 0 0 1 1
+  }
+  if(!'block ~ ~ ~ minecraft:nether_brick_fence') {
+    /function turretz:wither_turret/destroy
+  }
+  if(!'block ~ ~-1 ~ minecraft:nether_brick_fence') {
+    /function turretz:wither_turret/destroy
+  }
+  if(!'block ~ ~-2 ~ minecraft:dispenser') {
+    /function turretz:wither_turret/destroy
+  }
+  if(!'score @s tur_cool matches 1..') {
+    /scoreboard players set @s tur_cool 0
+  } else {
+    /scoreboard players remove @s tur_cool 1
+  }
+  /function turretz:wither_turret/aim
+
+
+  if('score @s tur_cool matches 0') {
+    if('score @s tur_turret_mode matches 1') {
+      if('entity @e[limit=1,sort=nearest,type=#unnamedde:hostile,distance=..10]' && 'block ~ ~-2 ~ minecraft:dispenser{Items:[{id:"minecraft:dead_bubble_coral",tag:{turretz:{id:"wither_fragment"}}}]}') {
+        /function turretz:wither_turret/shoot
+      }
+    }
+    if('score @s tur_turret_mode matches 2') {
+      if('entity @e[limit=1,sort=nearest,type=!#unnamedde:non-living,type=!minecraft:player,distance=..10]' && 'block ~ ~-2 ~ minecraft:dispenser{Items:[{id:"minecraft:dead_bubble_coral",tag:{turretz:{id:"wither_fragment"}}}]}') {
+        /function turretz:wither_turret/shoot
+      }
+    }
+    if('score unnamedDE installed_packs matches 1') {
+      if('score @s tur_turret_mode matches 3' && 'block ~ ~-2 ~ minecraft:dispenser{Items:[{id:"minecraft:dead_bubble_coral",tag:{turretz:{id:"wither_fragment"}}}]}') {
+        as('@e[limit=1,sort=nearest,type=!#unnamedde:non-living,distance=..10,gamemode=!creative,gamemode=!spectator]') {
+          if(!'score @s group_id = @e[tag=turretz_turret,limit=1,sort=nearest] ud_owner_id') {
+            as(@e[tag=turretz_turret,limit=1,sort=nearest]) {
+              /function turretz:wither_turret/shoot
+            }
+          }
+        }
+      }
+      if('score @s tur_turret_mode matches 4') {
+        if('entity @e[limit=1,sort=nearest,type=!#unnamedde:non-living,type=!#unnamedde:passive-neutral,distance=..10,gamemode=!creative,gamemode=!spectator]' && 'block ~ ~-2 ~ minecraft:dispenser{Items:[{id:"minecraft:dead_bubble_coral",tag:{turretz:{id:"wither_fragment"}}}]}') {
+          if(!'score @s group_id = @e[tag=turretz_turret,limit=1,sort=nearest] ud_owner_id') {
+            as(@e[tag=turretz_turret,limit=1,sort=nearest]) {
+              /function turretz:wither_turret/shoot
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+#file: ./wither_turret/destroy
+
+/summon item ~ ~.5 ~ {Motion:[0.0d,0.3d,0.0d],Item:{id:"minecraft:dead_bubble_coral",Count:1b,tag:{CustomModelData:702004,turretz:{id:"wither_ai"},display:{Name:"{\"text\":\"Wither AI\",\"color\":\"yellow\",\"italic\":false}",Lore:["{\"text\":\"Used to create turrets\",\"color\":\"green\",\"italic\":false}"]},HideFlags:1,Enchantments:[{id:"minecraft:unbreaking",lvl:1s}]}}}
+/kill @s
+
+#file: ./wither_turret/place_detect
+
+asat(@e[type=item,nbt={Item:{tag:{turretz:{id:"wither_ai"}}}}]), if(!'entity @e[type=armor_stand,tag=turretz_turret,distance=..1.5]') {
+  if('block ~ ~-1 ~ minecraft:nether_brick_fence' && 'block ~ ~-2 ~ minecraft:nether_brick_fence' && 'block ~ ~-3 ~ minecraft:dispenser[facing=up]') {
+    /function turretz:wither_turret/place_auto
+  }
+}
+
+#file: ./wither_turret/place_auto
+
+/function turretz:wither_turret/place
+/kill @s[type=item]
+
+#file: ./wither_turret/place
+
+align('xyz') {
+  /summon minecraft:armor_stand ~.5 ~-1 ~.5 {NoGravity:1b,Invulnerable:1b,Small:1b,Marker:1b,Invisible:1b,PersistenceRequired:1b,Tags:["turretz_wither_turret","turretz_turret"],DisabledSlots:4144959}
+}
+/scoreboard players set @e[type=armor_stand,limit=1,sort=nearest,tag=turretz_wither_turret] tur_turret_mode 1
+asat(@e[type=armor_stand,limit=1,sort=nearest,tag=turretz_wither_turret]), if('score unnamedDE installed_packs matches 1') {
+  /function turretz:set_id
+}
+
+#file: ./wither_turret/aim
+
+if('score @s tur_turret_mode matches 1') {
+  /tp @s ~ ~ ~ facing entity @e[limit=1,sort=nearest,type=#unnamedde:hostile,distance=..20] eyes
+}
+if('score @s tur_turret_mode matches 2') {
+  /tp @s ~ ~ ~ facing entity @e[limit=1,sort=nearest,type=!#unnamedde:non-living,type=!minecraft:player,distance=..20] eyes
+}
+if('score @s tur_turret_mode matches 3') {
+  /tp @s ~ ~ ~ facing entity @e[limit=1,sort=nearest,type=!#unnamedde:non-living,distance=..20,gamemode=!creative,gamemode=!spectator] eyes
+}
+if('score @s tur_turret_mode matches 4') {
+  /tp @s ~ ~ ~ facing entity @e[limit=1,sort=nearest,type=!#unnamedde:non-living,type=!#unnamedde:passive-neutral,distance=..20,gamemode=!creative,gamemode=!spectator] eyes
+}
+
+#file: ./wither_turret/shoot
+
+/function turretz:wither_turret/remove_wither
+
+/scoreboard players set @s tur_cool 50
+/execute store result score @s x_pos run data get entity @s Pos[0] 100
+/execute store result score @s y_pos run data get entity @s Pos[1] 100
+/execute store result score @s z_pos run data get entity @s Pos[2] 100
+/summon area_effect_cloud ^ ^ ^2 {Tags:["turretz_dummy"]}
+/execute store result score @e[type=area_effect_cloud,tag=turretz_dummy,limit=1,sort=nearest] x_pos run data get entity @e[type=area_effect_cloud,tag=turretz_dummy,limit=1,sort=nearest] Pos[0] 100
+/execute store result score @e[type=area_effect_cloud,tag=turretz_dummy,limit=1,sort=nearest] y_pos run data get entity @e[type=area_effect_cloud,tag=turretz_dummy,limit=1,sort=nearest] Pos[1] 100
+/execute store result score @e[type=area_effect_cloud,tag=turretz_dummy,limit=1,sort=nearest] z_pos run data get entity @e[type=area_effect_cloud,tag=turretz_dummy,limit=1,sort=nearest] Pos[2] 100
+/scoreboard players operation @s x_pos -= @e[type=area_effect_cloud,tag=turretz_dummy,limit=1,sort=nearest] x_pos
+/scoreboard players operation @s y_pos -= @e[type=area_effect_cloud,tag=turretz_dummy,limit=1,sort=nearest] y_pos
+/scoreboard players operation @s z_pos -= @e[type=area_effect_cloud,tag=turretz_dummy,limit=1,sort=nearest] z_pos
+/summon wither_skull ^ ^ ^1 {Tags:["turretz_wither"],ExplosionPower:0.75,direction:[0.0,0.0,0.0],power:[0.0,0.0,0.0]}
+/execute store result entity @e[type=wither_skull,tag=turretz_wither,limit=1,sort=nearest] direction[0] double -0.01 run scoreboard players get @s x_pos
+/execute store result entity @e[type=wither_skull,tag=turretz_wither,limit=1,sort=nearest] direction[1] double -0.01 run scoreboard players get @s y_pos
+/execute store result entity @e[type=wither_skull,tag=turretz_wither,limit=1,sort=nearest] direction[2] double -0.01 run scoreboard players get @s z_pos
+/execute store result entity @e[type=wither_skull,tag=turretz_wither,limit=1,sort=nearest] power[0] double -0.01 run scoreboard players get @s x_pos
+/execute store result entity @e[type=wither_skull,tag=turretz_wither,limit=1,sort=nearest] power[1] double -0.01 run scoreboard players get @s y_pos
+/execute store result entity @e[type=wither_skull,tag=turretz_wither,limit=1,sort=nearest] power[2] double -0.01 run scoreboard players get @s z_pos
+/scoreboard players reset @s x_pos
+/scoreboard players reset @s y_pos
+/scoreboard players reset @s z_pos
+
+#file: ./wither_turret/remove_wither
+
+modal removeFireball(i) {
+  /execute store result score @s tur_temp run data get block ~ ~-2 ~ Items[$(i)].Count
+  /scoreboard players remove @s tur_temp 1
+  /execute store result block ~ ~-2 ~ Items[$(i)].Count byte 1 run scoreboard players get @s tur_temp
+}
+
+if('block ~ ~-2 ~ minecraft:dispenser{Items:[{Slot:0b,id:"minecraft:dead_bubble_coral",tag:{turretz:{id:"wither_fragment"}}}]}') {
+  removeFireball(0)
+} else if('block ~ ~-2 ~ minecraft:dispenser{Items:[{Slot:1b,id:"minecraft:dead_bubble_coral",tag:{turretz:{id:"wither_fragment"}}}]}') {
+  removeFireball(1)
+} else if('block ~ ~-2 ~ minecraft:dispenser{Items:[{Slot:2b,id:"minecraft:dead_bubble_coral",tag:{turretz:{id:"wither_fragment"}}}]}') {
+  removeFireball(2)
+} else if('block ~ ~-2 ~ minecraft:dispenser{Items:[{Slot:3b,id:"minecraft:dead_bubble_coral",tag:{turretz:{id:"wither_fragment"}}}]}') {
+  removeFireball(3)
+} else if('block ~ ~-2 ~ minecraft:dispenser{Items:[{Slot:4b,id:"minecraft:dead_bubble_coral",tag:{turretz:{id:"wither_fragment"}}}]}') {
+  removeFireball(4)
+} else if('block ~ ~-2 ~ minecraft:dispenser{Items:[{Slot:5b,id:"minecraft:dead_bubble_coral",tag:{turretz:{id:"wither_fragment"}}}]}') {
+  removeFireball(5)
+} else if('block ~ ~-2 ~ minecraft:dispenser{Items:[{Slot:6b,id:"minecraft:dead_bubble_coral",tag:{turretz:{id:"wither_fragment"}}}]}') {
+  removeFireball(6)
+} else if('block ~ ~-2 ~ minecraft:dispenser{Items:[{Slot:7b,id:"minecraft:dead_bubble_coral",tag:{turretz:{id:"wither_fragment"}}}]}') {
+  removeFireball(7)
+} else if('block ~ ~-2 ~ minecraft:dispenser{Items:[{Slot:8b,id:"minecraft:dead_bubble_coral",tag:{turretz:{id:"wither_fragment"}}}]}') {
+  removeFireball(8)
+}
+
+/scoreboard players reset @s tur_temp

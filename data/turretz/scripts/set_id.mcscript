@@ -1,0 +1,3 @@
+#file: ./set_id
+
+/scoreboard players operation @s ud_owner_id = @p player_id

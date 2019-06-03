@@ -1,0 +1,15 @@
+#file: ./loot/wither_skeleton
+
+/loot spawn ~ ~ ~ loot turretz:entities/wither_skeleton
+
+#file: ./loot/wither
+
+/loot give @s loot turretz:entities/wither
+
+#file: ./loot/skeleton
+
+/loot spawn ~ ~ ~ loot turretz:entities/skeleton
+
+#file: ./loot/ghast
+
+/loot spawn ~ ~ ~ loot turretz:entities/ghast

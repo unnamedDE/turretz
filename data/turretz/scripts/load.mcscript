@@ -1,0 +1,11 @@
+
+#file: ./load
+
+// here goes your load content
+
+/scoreboard objectives add tur_cool dummy "Cooldown"
+/scoreboard objectives add tur_temp dummy "Temporary"
+/scoreboard objectives add set_turret_mode trigger "Turret Mode"
+/scoreboard objectives add tur_turret_mode dummy "Turret Mode"
+//scoreboard objectives add ud_owner_id dummy "Turret ID"
+/scoreboard objectives add tur_c_menu dummy "Creative Menu"

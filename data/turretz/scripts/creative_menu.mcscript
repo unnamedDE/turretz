@@ -1,0 +1,44 @@
+#file: ./creative_menu/select
+
+/tellraw @s [{"text":" ► ","color":"green"},{"text":"Turretz","hoverEvent":{"action":"show_text","value":"Click to select"},"clickEvent":{"action":"run_command","value":"/function turretz:creative_menu/menu"}}]
+
+#file: ./creative_menu/menu
+
+/tellraw @s {"text":""}
+/tellraw @s {"text":""}
+/tellraw @s [{"text":"<===== ","color":"aqua"},{"text":"Turretz","color":"red"},{"text":" =====>","color":"aqua"}]
+/tellraw @s {"text":""}
+
+#Content
+#
+#Wither Fragment
+/tellraw @s [{"text":"► ["},{"text":"1","color":"green","clickEvent":{"action":"run_command","value":"/scoreboard players set @s tur_c_menu 11"}},{"text":"] [","color":"reset"},{"text":"64","color":"green","clickEvent":{"action":"run_command","value":"/scoreboard players set @s tur_c_menu 21"}},{"text":"] ","color":"reset"},{"text":"Wither Fragment"}]
+#Skeleton AI
+/tellraw @s [{"text":"► ["},{"text":"1","color":"green","clickEvent":{"action":"run_command","value":"/scoreboard players set @s tur_c_menu 12"}},{"text":"] [","color":"reset"},{"text":"64","color":"green","clickEvent":{"action":"run_command","value":"/scoreboard players set @s tur_c_menu 22"}},{"text":"] ","color":"reset"},{"text":"Skeleton AI"}]
+#Ghast AI
+/tellraw @s [{"text":"► ["},{"text":"1","color":"green","clickEvent":{"action":"run_command","value":"/scoreboard players set @s tur_c_menu 13"}},{"text":"] [","color":"reset"},{"text":"64","color":"green","clickEvent":{"action":"run_command","value":"/scoreboard players set @s tur_c_menu 23"}},{"text":"] ","color":"reset"},{"text":"Ghast AI"}]
+#Wither AI
+/tellraw @s [{"text":"► ["},{"text":"1","color":"green","clickEvent":{"action":"run_command","value":"/scoreboard players set @s tur_c_menu 14"}},{"text":"] [","color":"reset"},{"text":"64","color":"green","clickEvent":{"action":"run_command","value":"/scoreboard players set @s tur_c_menu 24"}},{"text":"] ","color":"reset"},{"text":"Wither AI"}]
+
+/tellraw @s {"text":""}
+/tellraw @s [{"text":" ↑ ","color":"red"},{"text":"Return to main menu","hoverEvent":{"action":"show_text","value":"Click to return"},"clickEvent":{"action":"run_command","value":"/function unnamedde:creative_menu"}}]
+/tellraw @s {"text":""}
+/tellraw @s {"text":""}
+
+#file: ./creative_menu/main
+
+modal creativeMenu(id,item,count = 64) {
+  if('score @s tur_c_menu matches 1$(id)') {
+    /give @s $(item) 1
+    /scoreboard players reset @s tur_c_menu
+  }
+  if('score @s tur_c_menu matches 2$(id)') {
+    /give @s $(item) $(count)
+    /scoreboard players reset @s tur_c_menu
+  }
+}
+
+creativeMenu(1,'minecraft:dead_bubble_coral{CustomModelData:702001,turretz:{id:"wither_fragment"},display:{Name:"{\\"text\\":\\"Wither Fragment\\",\\"italic\\":false}"}}')
+creativeMenu(2,'minecraft:dead_bubble_coral{CustomModelData:702002,turretz:{id:"skeleton_ai"},display:{Name:"{\\"text\\":\\"Skeleton AI\\",\\"color\\":\\"yellow\\",\\"italic\\":false}",Lore:["{\\"text\\":\\"Used to create turrets\\",\\"color\\":\\"green\\",\\"italic\\":false}"]},HideFlags:1,Enchantments:[{id:"minecraft:unbreaking",lvl:1s}]}')
+creativeMenu(3,'minecraft:dead_bubble_coral{CustomModelData:702003,turretz:{id:"ghast_ai"},display:{Name:"{\\"text\\":\\"Ghast AI\\",\\"color\\":\\"yellow\\",\\"italic\\":false}",Lore:["{\\"text\\":\\"Used to create turrets\\",\\"color\\":\\"green\\",\\"italic\\":false}"]},HideFlags:1,Enchantments:[{id:"minecraft:unbreaking",lvl:1s}]}')
+creativeMenu(4,'minecraft:dead_bubble_coral{CustomModelData:702004,turretz:{id:"wither_ai"},display:{Name:"{\\"text\\":\\"Wither AI\\",\\"color\\":\\"yellow\\",\\"italic\\":false}",Lore:["{\\"text\\":\\"Used to create turrets\\",\\"color\\":\\"green\\",\\"italic\\":false}"]},HideFlags:1,Enchantments:[{id:"minecraft:unbreaking",lvl:1s}]}')

@@ -1,0 +1,20 @@
+
+#file: ./main
+// here goes your main content
+// executes 20 times a second
+
+/function turretz:arrow_turret/main
+/function turretz:fireball_turret/main
+/function turretz:wither_turret/main
+
+asat(@a) {
+  /function turretz:creative_menu/main
+  if('entity @e[tag=turretz_turret,distance=..5]') {
+    /scoreboard players enable @s set_turret_mode
+  } else if('score @s set_turret_mode matches 0') {
+    /scoreboard players reset @s set_turret_mode
+  }
+  if('score @s set_turret_mode matches 1..4') {
+    /function turretz:set_turret_mode
+  }
+}

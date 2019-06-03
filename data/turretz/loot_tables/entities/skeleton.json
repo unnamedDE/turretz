@@ -1,0 +1,30 @@
+{
+  "pools": [
+    {
+      "conditions": [
+        {
+          "condition": "random_chance",
+          "chance": 0.05
+        }
+      ],
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "item",
+          "name": "minecraft:dead_bubble_coral",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "set_count",
+              "count": 1
+            },
+            {
+              "function": "set_nbt",
+              "tag": "{CustomModelData:702002,turretz:{id:\"skeleton_ai\"},display:{Name:\"{\\\"text\\\":\\\"Skeleton AI\\\",\\\"color\\\":\\\"yellow\\\",\\\"italic\\\":false}\",Lore:[\"{\\\"text\\\":\\\"Used to create turrets\\\",\\\"color\\\":\\\"green\\\",\\\"italic\\\":false}\"]},Enchantments:[{id:\"enchant\",lvl:1s}]}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
